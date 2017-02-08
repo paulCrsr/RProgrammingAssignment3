@@ -1,9 +1,13 @@
+source("shared.R")
+
 rankhospital <- function(state, outcome, num="best") {
-	## Read outcome data
-
-        ## Check that state and outcome are valid
-
-        ## Return hospital name in that state with the given rank
-        ## 30-day death rate
-
+        
+        ranked <- rankedByState(state, outcome)
+        size <- nrow(ranked)
+        
+        if (num == "best") return(ranked[1,]$name)
+        else if (num == "worst") return(ranked[size, ]$name)
+        else if (num > size) return(NA)
+        else return(ranked[num,]$name)
+        
 }
