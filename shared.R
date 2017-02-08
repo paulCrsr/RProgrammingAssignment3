@@ -1,4 +1,4 @@
-rankedByState <- function(state, outcome) {
+rankedByState <- function(state=NULL, outcome) {
         
         data <- read.csv("./data/outcome-of-care-measures.csv", colClasses = "character")
         cols <- list(
@@ -9,7 +9,7 @@ rankedByState <- function(state, outcome) {
         allowedStates <- sort(unique(data$State))
         allowedOutcomes <- names(cols)
         
-        if (!is.element(state, allowedStates)) stop("invalid state")       
+        if (!is.null(state) && !is.element(state, allowedStates)) stop("invalid state")       
         if (!is.element(outcome, allowedOutcomes)) stop("invalid outcome")
         
         subsetForOutcome <- function() {
@@ -22,8 +22,10 @@ rankedByState <- function(state, outcome) {
                                 )
                         )
                 )
-                names(d) <- c("name","state", "score")                
-                d[!is.na(d$score) & d$state==state, ]
+                names(d) <- c("name","state", "score")
+                if (!is.null(state)) return(d[!is.na(d$score) & d$state==state, ])
+                else return(d[!is.na(d$score), ])
+                
         }
         
         s <- subsetForOutcome()
